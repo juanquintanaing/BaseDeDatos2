@@ -1,5 +1,65 @@
 # Ejercicios
 
+## BD academia
+
+```JS
+use academia
+
+db.cursos.drop()
+db.estudiantes.drop()
+db.inscripciones.drop()
+```
+
+### cursos
+
+```JS
+const niveles = ["basico", "intermedio", "avanzado"]
+const modalidades = ["online", "presencial", "hibrido"]
+
+for (let i = 1; i <= 50; i++) {
+  db.cursos.insertOne({
+    nombre: "Curso " + i,
+    descripcion: "Curso completo de bases de datos y MongoDB nivel " + niveles[i % 3],
+    nivel: niveles[i % 3],
+    modalidad: modalidades[i % 3],
+    creditos: (i % 5) + 1,
+    fechaCreacion: new Date(2024, i % 12, (i % 28) + 1),
+    fechaCertificacion: i % 4 === 0 ? new Date(2025, i % 12, (i % 28) + 1) : null
+  })
+}
+```
+
+
+
+### estudiantes
+
+```JS
+for (let i = 1; i <= 60; i++) {
+  db.estudiantes.insertOne({
+    nombre: "Estudiante " + i,
+    email: "estudiante" + i + "@correo.com",
+    edad: 18 + (i % 10),
+    ciudad: ["Madrid", "Bogota", "CDMX", "Buenos Aires"][i % 4],
+    activo: i % 2 === 0,
+    telefonoAlternativo: i % 5 === 0 ? "600000" + i : undefined
+  })
+}
+```
+
+### inscripciones
+
+```JS
+for (let i = 1; i <= 100; i++) {
+  db.inscripciones.insertOne({
+    estudianteId: (i % 60) + 1,
+    cursoId: (i % 50) + 1,
+    fecha: new Date(2025, i % 12, (i % 28) + 1),
+    estado: ["activa", "completada", "cancelada"][i % 3],
+    nota: Math.floor(Math.random() * 5) + 1
+  })
+}
+```
+
 ## Ejercicio 1
 
 Calcular total de cursos por modalidad y ordenarlos descendente

@@ -1,5 +1,134 @@
 # Ejercicios
 
+## BD academia
+
+```JS
+use academia
+
+db.cursos.drop()
+db.estudiantes.drop()
+db.inscripciones.drop()
+```
+
+### cursos
+
+```JS
+const niveles = ["basico", "intermedio", "avanzado"]
+const modalidades = ["online", "presencial", "hibrido"]
+
+for (let i = 1; i <= 50; i++) {
+  db.cursos.insertOne({
+    nombre: "Curso " + i,
+    descripcion: "Curso completo de bases de datos y MongoDB nivel " + niveles[i % 3],
+    nivel: niveles[i % 3],
+    modalidad: modalidades[i % 3],
+    creditos: (i % 5) + 1,
+    fechaCreacion: new Date(2024, i % 12, (i % 28) + 1),
+    fechaCertificacion: i % 4 === 0 ? new Date(2025, i % 12, (i % 28) + 1) : null
+  })
+}
+```
+
+para Sparse
+
+```JS
+db.cursos.deleteMany({ fechaCertificacion: null })
+
+for (let i = 1; i <= 50; i++) {
+  db.cursos.insertOne({
+    nombre: "Curso Extra " + i,
+    descripcion: "Programa avanzado de optimizacion y modelado documental",
+    nivel: niveles[i % 3],
+    modalidad: modalidades[i % 3],
+    creditos: (i % 5) + 1,
+    fechaCreacion: new Date(2024, i % 12, (i % 28) + 1),
+    ...(i % 3 === 0 && { fechaCertificacion: new Date(2025, i % 12, (i % 28) + 1) })
+  })
+}
+```
+
+### estudiantes
+
+```JS
+for (let i = 1; i <= 60; i++) {
+  db.estudiantes.insertOne({
+    nombre: "Estudiante " + i,
+    email: "estudiante" + i + "@correo.com",
+    edad: 18 + (i % 10),
+    ciudad: ["Madrid", "Bogota", "CDMX", "Buenos Aires"][i % 4],
+    activo: i % 2 === 0,
+    telefonoAlternativo: i % 5 === 0 ? "600000" + i : undefined
+  })
+}
+```
+
+### inscripciones
+
+```JS
+for (let i = 1; i <= 100; i++) {
+  db.inscripciones.insertOne({
+    estudianteId: (i % 60) + 1,
+    cursoId: (i % 50) + 1,
+    fecha: new Date(2025, i % 12, (i % 28) + 1),
+    estado: ["activa", "completada", "cancelada"][i % 3],
+    nota: Math.floor(Math.random() * 5) + 1
+  })
+}
+```
+
+## BD tienda
+
+```JS
+use tienda
+
+db.pedidos.drop()
+db.ventas.drop()
+db.logs.drop()
+```
+
+### pedidos
+
+```JS
+for (let i = 1; i <= 100; i++) {
+  db.pedidos.insertOne({
+    clienteId: (i % 30) + 1,
+    fecha: new Date(2026, i % 12, (i % 28) + 1),
+    total: Math.floor(Math.random() * 1000) + 50,
+    estado: ["pendiente", "enviado", "entregado"][i % 3],
+    cliente: {
+      nombre: "Cliente " + ((i % 30) + 1),
+      ciudad: ["Madrid", "Lima", "CDMX", "Santiago"][i % 4]
+    }
+  })
+}
+```
+
+### ventas
+
+```JS
+for (let i = 1; i <= 80; i++) {
+  db.ventas.insertOne({
+    clienteId: (i % 25) + 1,
+    producto: "Producto " + (i % 15),
+    cantidad: (i % 5) + 1,
+    total: Math.floor(Math.random() * 500) + 20,
+    fecha: new Date(2026, i % 12, (i % 28) + 1)
+  })
+}
+```
+
+### logs
+
+```JS
+for (let i = 1; i <= 100; i++) {
+  db.logs.insertOne({
+    usuarioId: (i % 20) + 1,
+    accion: ["login", "logout", "compra", "consulta"][i % 4],
+    fecha: new Date(Date.now() - (i * 1000000))
+  })
+}
+```
+
 ## Ejercicio 1 — Sparse Index
 
 1. Crear colección usuarios con algunos documentos que tengan campo telefonoAlternativo.
