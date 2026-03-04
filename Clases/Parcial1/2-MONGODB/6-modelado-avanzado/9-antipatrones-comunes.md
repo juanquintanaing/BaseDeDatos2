@@ -1,48 +1,85 @@
 # Antipatrones comunes en diseño documental
 
-Entender qué NO hacer es tan importante como saber qué hacer.
+Entender los errores evita rediseños costosos.
 
-### Antipatrón 1: Sobre-normalización
+### Sobre-normalización
 
-Diseñar MongoDB como si fuera relacional.
+Intentar replicar modelo relacional:
 
-Demasiadas colecciones pequeñas.
-Exceso de \$lookup.
+* Demasiadas colecciones pequeñas.
+* Dependencia constante de \$lookup.
+* Modelo fragmentado.
 
-Resultado:
+Consecuencia:
 
-* Alto costo de consulta
-* Complejidad innecesaria
+* Aumento de latencia.
+* Mayor consumo de CPU.
+* Complejidad innecesaria.
 
-### Antipatrón 2: Documentos gigantes
+MongoDB no fue optimizado para joins intensivos como un RDBMS.
 
-Guardar arrays que crecen sin límite.
+Si cada consulta requiere 3 \$lookup, el diseño probablemente es incorrecto.
 
-Ejemplo peligroso:
+### Documentos sin control de crecimiento
+
+Arrays que crecen sin límite:
 
 ```JS
 {
   usuario: "Carlos",
-  logs: [ ... miles de registros ... ]
+  logs: [ ... 50000 registros ... ]
 }
 ```
 
 Problemas:
 
-* Reubicación constante en disco
-* Impacto en rendimiento
-* Riesgo de alcanzar 16 MB
+* Reubicación constante en disco.
+* Fragmentación.
+* Riesgo de alcanzar límite de 16MB.
+* Actualizaciones cada vez más costosas.
 
-### Antipatrón 3: Abuso de índices
+Solución:
 
-Crear índices en todos los campos.
+* Bucket pattern.
+* Colección separada.
+* TTL.
+* Particionamiento lógico.
 
-Consecuencias:
+### Índices innecesarios
 
-* Escrituras más lentas
-* Mayor uso de memoria
-* Fragmentación
+Crear índices en todos los campos "por si acaso".
 
-El índice es una inversión, no un adorno.
+Impacto técnico real:
 
+* Cada insert debe actualizar todos los índices.
+* Escrituras más lentas.
+* Mayor uso de RAM.
+* Mayor uso de disco.
+* Rebalanceo más frecuente en sharding.
+
+Regla profesional:
+
+Cada índice debe justificarse por una consulta real medida con explain().
+
+### Uso incorrecto de shard key
+
+Elegir campo monotónico:
+
+```JS
+{ fecha: 1 }
+```
+
+Genera:
+
+* Hotspot.
+* Shard sobrecargado.
+* Baja escalabilidad real.
+
+Este error puede obligar a migraciones complejas.
+
+### No medir antes de optimizar
+
+* Agregar índices sin medir.
+* Activar sharding sin análisis de carga.
+* Optimización sin métricas es especulación.
 

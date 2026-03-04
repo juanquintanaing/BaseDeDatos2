@@ -1,43 +1,89 @@
 # Observabilidad y monitoreo básico
 
-Un sistema productivo requiere visibilidad.
+Un sistema sin observabilidad no es profesional.
 
-No basta con que funcione.
-Debe poder medirse.
+MongoDB permite monitoreo en tres niveles:
 
-Herramientas básicas:
+1. Nivel de consulta
+2. Nivel de base de datos
+3. Nivel de cluster
 
-### db.serverStatus()
+### Nivel de Consulta — Explain profundo
 
-Nos da métricas como:
+Comando clave:
 
-* Opcounters (lecturas/escrituras)
-* Memoria
-* Locks
-* Conexiones activas
+```JS
+db.cursos.find({ nivel: "avanzado" }).explain("executionStats")
+```
 
-Explain como herramienta continua:
-No solo para desarrollo.
-También para diagnóstico en producción.
+Campos críticos a analizar:
 
-Indicadores críticos:
+* stage (IXSCAN o COLLSCAN)
+* totalDocsExamined
+* totalKeysExamined
+* executionTimeMillis
 
-* totalDocsExamined muy alto.
-* Uso frecuente de COLLSCAN.
-* Tiempo creciente en consultas repetidas.
+Interpretación profesional:
 
-En MongoDB Atlas:
-Se pueden observar:
+Si totalDocsExamined >> nReturned
+El índice no es óptimo.
 
-* CPU
-* IOPS
-* Uso de disco
-* Latencia
-* Balanceo entre shards
+Si aparece COLLSCAN
+Falta índice o índice incorrecto.
 
-Una buena práctica profesional:
+### Nivel de Base de Datos — serverStatus
 
-Establecer métricas base.
-Comparar después de cambios.
-Nunca optimizar sin medir.
+```JS
+db.serverStatus()
+```
+
+Métricas clave:
+
+* opcounters (lecturas y escrituras)
+* connections
+* mem
+* wiredTiger.cache
+
+Un aumento constante en cache eviction puede indicar presión de memoria.
+
+### Nivel de Índices — Uso real
+
+```JS
+db.collection.getIndexes()
+```
+
+Pero lo importante es:
+
+Identificar índices no usados.
+
+En entornos productivos se analizan:
+
+* Index usage stats
+* Plan cache
+
+Un índice no utilizado es deuda técnica.
+
+### Monitoreo en entornos distribuidos
+
+En sistemas con sharding:
+
+Se debe monitorear:
+
+* Balanceo de chunks
+* Distribución por shard
+* Latencia por shard
+* Throughput por nodo
+
+Una distribución desigual implica mala shard key.
+
+### Cultura de monitoreo continuo
+
+Práctica recomendada:
+
+1. Establecer métricas base.
+2. Aplicar cambio.
+3. Medir impacto.
+4. Revertir si empeora.
+
+La optimización es iterativa.
 

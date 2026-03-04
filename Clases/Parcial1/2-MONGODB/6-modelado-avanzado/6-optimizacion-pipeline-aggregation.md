@@ -9,7 +9,10 @@ Reducir volumen lo antes posible.
 ### Caso incorrecto
 
 ```JS
-db.cursos.aggregate(pipeline, { allowDiskUse: true })
+[
+  { $group: ... },
+  { $match: ... }
+]
 ```
 
 Estamos agrupando todo para luego filtrar.
@@ -17,7 +20,10 @@ Estamos agrupando todo para luego filtrar.
 ### Caso optimizado
 
 ```JS
-db.cursos.aggregate(pipeline, { allowDiskUse: true })
+[
+  { $group: ... },
+  { $match: ... }
+]
 ```
 
 Filtramos antes de agrupar.
@@ -27,7 +33,7 @@ Filtramos antes de agrupar.
 Si no necesitamos todos los campos:
 
 ```JS
-db.cursos.aggregate(pipeline, { allowDiskUse: true })
+{ $project: { campoNecesario: 1 } }
 ```
 
 Reduce memoria usada en `$group`.
