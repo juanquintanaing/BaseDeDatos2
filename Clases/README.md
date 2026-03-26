@@ -1,5 +1,4 @@
 - [x] **[Introducción](introduccion.md)**
-
 - [x] Primer Parcial
   
   - [x] Introducción a NoSQL
@@ -26,8 +25,8 @@
     
     - [x] [Introducción y entorno](Parcial2/3-Neo4J/1-teoria)
     - [x] [Cypher básico y creación de datos](Parcial2/3-Neo4J/2-cypher-basico)
-    - [ ] [Relaciones y patrones](Parcial2/3-Neo4J/3-relaciones-patrones)
-    - [ ] [Modelado de grafos](Parcial2/3-Neo4J/4-modelado)
+    - [x] [Relaciones y patrones](Parcial2/3-Neo4J/3-relaciones-patrones)
+    - [x] [Modelado de grafos](Parcial2/3-Neo4J/4-modelado)
     - [ ] [Consultas intermedias](Parcial2/3-Neo4J/5-consultas-intermedias)
     - [ ] [Paths y recorridos](Parcial2/3-Neo4J/6-paths)
     - [ ] [Casos reales](Parcial2/3-Neo4J/7-casos-reales)
