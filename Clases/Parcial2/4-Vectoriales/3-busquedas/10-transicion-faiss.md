@@ -45,7 +45,6 @@ for texto in base:
 print({k: len(v) for k, v in indice.items()})
 ```
 
-
 ### Embeddings del índice
 
 Se generan embeddings por separado para cada grupo.
@@ -56,8 +55,6 @@ indice_vec = {
     for k, v in indice.items()
 }
 ```
-
-
 
 # Nueva estrategia de búsqueda
 
@@ -228,7 +225,7 @@ Sistema real:
 
 ---
 
-# Cambio conceptual final de la clase
+# Cambio conceptual
 
 El problema deja de ser:
 

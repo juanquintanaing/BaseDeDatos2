@@ -4,7 +4,7 @@ En sistemas reales, esta idea se implementa mediante estructuras de indexación.
 
 Una de las más utilizadas es FAISS:
 
-FAISS
+Facebook AI Similarity Search
 
 FAISS no cambia cómo se representan los vectores, sino cómo se organizan para ser buscados.
 
